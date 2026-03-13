@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { getRecommendations } from '@/data/products';
-import MagicLinkAuth from '@/components/auth/MagicLinkAuth';
+import DummyPaymentGateway from '@/components/checkout/DummyPaymentGateway';
 import { generateBillPDF } from '@/lib/generateBill';
 import BillingCounterStatus from '@/components/BillingCounterStatus';
 import FamilySyncMode from '@/components/FamilySyncMode';
@@ -30,7 +30,7 @@ const Checkout = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
   const [showScanner, setShowScanner] = useState(false);
-  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showPaymentGateway, setShowPaymentGateway] = useState(false);
   const [pendingPayment, setPendingPayment] = useState(false);
   const [billNumber, setBillNumber] = useState('');
   const hasRestoredCart = useRef(false);
@@ -191,20 +191,12 @@ const Checkout = () => {
   };
 
   const handlePayment = () => {
-    if (!isAuthenticated) {
-      setPendingPayment(true);
-      setShowAuthModal(true);
-    } else {
-      processPayment();
-    }
+    setShowPaymentGateway(true);
   };
 
-  const handleAuthSuccess = () => {
-    setShowAuthModal(false);
-    if (pendingPayment) {
-      setPendingPayment(false);
-      processPayment();
-    }
+  const handlePaymentSuccess = () => {
+    setShowPaymentGateway(false);
+    processPayment();
   };
 
   const handleDownloadBill = () => {
@@ -324,14 +316,12 @@ const Checkout = () => {
     <div className="min-h-screen bg-background relative">
       <Navbar />
 
-      {/* Magic Link Auth Modal */}
-      <MagicLinkAuth
-        isOpen={showAuthModal}
-        onClose={() => {
-          setShowAuthModal(false);
-          setPendingPayment(false);
-        }}
-        onSuccess={handleAuthSuccess}
+      {/* Dummy Payment Gateway Modal */}
+      <DummyPaymentGateway
+        isOpen={showPaymentGateway}
+        onClose={() => setShowPaymentGateway(false)}
+        onSuccess={handlePaymentSuccess}
+        amount={finalTotal}
       />
 
       {/* Barcode Scanner Overlay */}
@@ -606,7 +596,7 @@ const Checkout = () => {
                       disabled={isProcessing}
                     >
                       <CreditCard className="w-5 h-5 mr-2" />
-                      {isProcessing ? 'Processing...' : isAuthenticated ? t.payNow : 'Verify & Pay'}
+                      {isProcessing ? 'Processing...' : t.payNow || 'Pay Now'}
                     </Button>
                   </CardContent>
                 </Card>
