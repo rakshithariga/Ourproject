@@ -2,6 +2,7 @@ import { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Search, Filter, Mic, Camera } from 'lucide-react';
 import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 import FloatingEmojis from '@/components/FloatingEmojis';
 import ProductCard from '@/components/ProductCard';
 import { Button } from '@/components/ui/button';
@@ -317,6 +318,7 @@ const Products = () => {
           )}
         </div>
       </main>
+      <Footer />
     </div>
   );
 };

@@ -4,6 +4,7 @@ import { Minus, Plus, Trash2, CreditCard, ArrowLeft, Sparkles, Mail, Download, S
 import { Link } from 'react-router-dom';
 import confetti from 'canvas-confetti';
 import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
 import { useLanguage } from '@/context/LanguageContext';
@@ -609,6 +610,7 @@ const Checkout = () => {
           )}
         </div>
       </main>
+      <Footer />
     </div>
   );
 };

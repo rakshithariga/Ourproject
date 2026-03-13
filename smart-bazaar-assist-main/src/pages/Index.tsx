@@ -8,6 +8,9 @@ import { useLanguage } from '@/context/LanguageContext';
 import BillingCounterStatus from '@/components/BillingCounterStatus';
 import FamilySyncMode from '@/components/FamilySyncMode';
 import FindHelpButton from '@/components/FindHelpButton';
+import CompleteProfile from '@/pages/CompleteProfile';
+import ChatWidget from '@/components/chat/ChatWidget';
+import Footer from '@/components/Footer';
 
 const Index = () => {
   const { t } = useLanguage();
@@ -232,12 +235,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-8 px-4 border-t border-border">
-        <div className="container mx-auto max-w-6xl text-center">
-          <p className="text-sm text-muted-foreground">{t.copyright}</p>
-        </div>
-      </footer>
+      <Footer />
     </div>;
 };
 export default Index;
