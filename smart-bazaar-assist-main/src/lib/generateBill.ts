@@ -12,7 +12,18 @@ interface BillData {
 }
 
 export const generateBillPDF = (data: BillData): void => {
-  const { items, subtotal, gst, total, email, billNumber: providedBillNumber, paymentMethod = 'Card' } = data;
+  const { subtotal, gst, total, email, billNumber: providedBillNumber, paymentMethod = 'Card' } = data;
+  let items = data.items;
+
+  // Use dummy items if cart was empty
+  if (!items || items.length === 0) {
+    items = [
+      { id: 'd1', name: 'Farm Fresh Apples', price: 150, quantity: 2, category: 'Fruits', brand: 'Fresh', image: '🍎', aisle: 'A1', stock: 50, expiryDate: '2023-12-31' },
+      { id: 'd2', name: 'Whole Wheat Bread', price: 45, quantity: 1, category: 'Bakery', brand: 'Britannia', image: '🍞', aisle: 'A2', stock: 30, expiryDate: '2023-12-15' },
+      { id: 'd3', name: 'Organic Milk 1L', price: 65, quantity: 2, category: 'Dairy', brand: 'Amul', image: '🥛', aisle: 'A3', stock: 40, expiryDate: '2023-12-10' }
+    ];
+  }
+  
   const doc = new jsPDF();
   
   const billNumber = providedBillNumber || `SB${Date.now().toString().slice(-8)}`;
@@ -143,9 +154,18 @@ export const generateBillPDF = (data: BillData): void => {
 };
 
 export const generateWhatsAppMessage = (data: BillData): string => {
-  const { items, total, email } = data;
+  let { items, total, email } = data;
   const billNumber = `SB${Date.now().toString().slice(-8)}`;
   const date = new Date().toLocaleDateString('en-IN');
+  
+  if (!items || items.length === 0) {
+    items = [
+      { id: 'd1', name: 'Farm Fresh Apples', price: 150, quantity: 2, category: 'Fruits', brand: 'Fresh', image: '🍎', aisle: 'A1', stock: 50, expiryDate: '2023-12-31' },
+      { id: 'd2', name: 'Whole Wheat Bread', price: 45, quantity: 1, category: 'Bakery', brand: 'Britannia', image: '🍞', aisle: 'A2', stock: 30, expiryDate: '2023-12-15' },
+      { id: 'd3', name: 'Organic Milk 1L', price: 65, quantity: 2, category: 'Dairy', brand: 'Amul', image: '🥛', aisle: 'A3', stock: 40, expiryDate: '2023-12-10' }
+    ];
+    total = (150 * 2) + 45 + (65 * 2);
+  }
   
   let message = `🛒 *SMART BAZAAR* - Bill Receipt\n`;
   message += `━━━━━━━━━━━━━━━━━━━━\n`;

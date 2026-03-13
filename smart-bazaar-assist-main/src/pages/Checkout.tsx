@@ -161,9 +161,13 @@ const Checkout = () => {
       setShowScanner(false);
       setIsComplete(true);
       
-      // Save billing history and send email
+      // Save billing history
       await saveBillingHistory(newBillNumber);
-      await sendBillEmail(newBillNumber);
+      
+      // Email sending is now optional or handled elsewhere
+      if (email) {
+        await sendBillEmail(newBillNumber);
+      }
       
       // Confetti explosion!
       confetti({
